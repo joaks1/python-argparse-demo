@@ -1,4 +1,9 @@
-A simple demo of the argparse module in Python.
+A simple demo of the `argparse` module in Python.
+
+For more about `argparse` here's the documentation and the tutorial:
+
+-   Docs: <https://docs.python.org/3/library/argparse.html>
+-   Tutorial: <https://docs.python.org/3/howto/argparse.html>
 
 
 # Acknowledgments
