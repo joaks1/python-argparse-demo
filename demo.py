@@ -21,7 +21,7 @@ if __name__ == '__main__':
     parser.add_argument('-n', '--number',
             type = int,
             default = 1,
-            help = 'An integer. Default: 1')
+            help = 'An integer.')
     parser.add_argument('-t', '--threshold',
             type = float,
             default = 3.4,
