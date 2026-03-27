@@ -16,12 +16,13 @@ if __name__ == '__main__':
     # This `add_argument` method specifies that this script expects 1 or more
     # file paths as positional arguments
     parser.add_argument(
-        'paths',                     # The name we'll use to access this argument
+        'file_paths',                # The name we'll use to access this argument
         type = str,                  # The type of the argument
         metavar = 'PATH',            # The placeholder name in the help menu
         nargs = '+',                 # We expect 1 or more file paths
         help = 'A path to a file.',  # The help menu text
     )
+
     # Using the `add_argument` method again to create an optional keyword
     # argument for an integer
     parser.add_argument(
@@ -30,6 +31,7 @@ if __name__ == '__main__':
         default = 1,          # Specifying a default value
         help = 'An integer.',
     )
+
     # Adding another optional keyword argument for a floating-point number
     parser.add_argument(
         '-t', '--threshold',
@@ -37,6 +39,7 @@ if __name__ == '__main__':
         default = 3.4,
         help = 'A super duper important threshold.',
     )
+
     # Adding another optional boolean keyword argument
     parser.add_argument(
         '-c', '--i-am-cool',
@@ -47,7 +50,8 @@ if __name__ == '__main__':
 
     # Parse the command-line arguments into a 'dict'-like container
     args = parser.parse_args()
-    # What does `args` "look" like?
+
+    # What does `args` object "look" like?
     print(
         "The args after being processed by the argparse parser object:\n",
         args)
@@ -58,7 +62,7 @@ if __name__ == '__main__':
     # For positional arguments (like the first `add_argument` above), we access
     # the value of the arugment using the name we provided as the first
     # argument ("paths")
-    print("Paths:", args.paths)
+    print("Paths:", args.file_paths)
 
     # For keyword arguments (like all the rest of the `add_argument` calls
     # above), we access the value of the argument using the the long form of
@@ -66,4 +70,4 @@ if __name__ == '__main__':
     # dashes with underscores)
     print("Number:", args.number)
     print("Threshold:", args.threshold)
-    print("I-am-cool:", args.i_am_cool)
+    print("I am cool?", args.i_am_cool)
