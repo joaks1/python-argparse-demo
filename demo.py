@@ -16,9 +16,9 @@ if __name__ == '__main__':
     # This `add_argument` method specifies that this script expects 1 or more
     # file paths as positional arguments
     parser.add_argument(
-        'file_paths',                # The name we'll use to access this argument
+        'file_path',                # The name we'll use to access this argument
         type = str,                  # The type of the argument
-        metavar = 'PATH',            # The placeholder name in the help menu
+        metavar = 'FILE-PATH',       # The placeholder name in the help menu
         nargs = '+',                 # We expect 1 or more file paths
         help = 'A path to a file.',  # The help menu text
     )
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     # For positional arguments (like the first `add_argument` above), we access
     # the value of the arugment using the name we provided as the first
     # argument ("paths")
-    print("Paths:", args.file_paths)
+    print("Paths:", args.file_path)
 
     # For keyword arguments (like all the rest of the `add_argument` calls
     # above), we access the value of the argument using the the long form of

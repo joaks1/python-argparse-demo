@@ -42,11 +42,40 @@ At this point, you should have
         $ git push origin master
 
 
+# Types of command-line arguments
+
+Before we get into parsing command-line arguments with argparse,
+let's first talk about two types of command-line arguments:
+**Keyword** and **positional** command-line arguments.
+For example, on the command line, when we type:
+
+```bash
+ls --sort=time $HOME
+```
+
+`$HOME` is a positional argument, and `--sort=time` is an optional keyword
+argument.
+A positional argument is an argument provided after the
+name of the program, that does not have an option flag associated with it.
+Because there is no flag for the argument, its identity is determined by its
+position (like `$HOME` in the above example).
+
+A keyword argument is also provided after the name of program, but has
+a keyword flag to identify it.
+In our example above, the `time` argument was identified by the `--sort`
+keyword flag, so the `ls` program knows we want to sort the list of
+files/directories in our home folder by time.
+
+
 # Intro to argparse
 
 Python's `argparse` module provides flexible ways of handling
-command-line arguments within your scripts.
+command-line arguments within your own scripts.
 Let's go over the basic workflow of using `argparse`.
+Much of the example code snippets below are in the `demo.py` script in this
+directory (folder).
+So, you might find it helpful to have `demo.py` open while you read through the
+steps below.
 
 ## 1. Import the argparse module
 
@@ -56,7 +85,8 @@ import argparse
 
 ## 2. Create an ArgumentParser object
 
-After importing `argparse`, you create an instance of the `ArgumentParser`.
+After importing `argparse`, you create an instance of the `ArgumentParser`
+class.
 For example:
 
 ```python
@@ -78,29 +108,7 @@ parser = argparse.ArgumentParser(
 With the `ArgumentParser` object "in hand", we can easily add command-line
 arguments we need for our script.
 These arguments could be numbers, strings, boolean options, or paths to files.
-Let's look at some examples
-
-### 3.1 A quick aside about types of command line arguments
-
-There are **keyword** and **positional** command line arguments.
-For example, on the command line, when we type:
-
-```bash
-ls --sort=time $HOME
-```
-
-`$HOME` is a positional argument, and `--sort=time` is an optional keyword
-argument.
-A positional argument is an argument provided after the
-name of our script, that does not have an option flag associated with it.
-Because there is not flag for the argument, its identity is determined by its
-position (like `$HOME` in the above example).
-
-A keyword argument is also provided after the name of our script, but has
-a keyword flag to identify it.
-In our example above, the `time` argument was identified by the `--sort`
-keyword flag, so the `ls` program knows we want to sort the list of
-files/directories by time.
+Let's look at some examples.
 
 ### 3.1. Add a positional argument
 
@@ -122,7 +130,7 @@ In the example above:
 -   `"file_path"` will be the key we use to access the argument provided on the
     command line within our script (see Step 5 below)
 -   `type = str` tells `argparse` what type of object the command-line argument
-    will be converted into
+    should be converted into
 -   `metavar = "FILE-PATH"` is the placeholder name for this argument shown in
     the help menu that `argparse` automatically creates for our script
 -   `help = ...` is the text provided in the help menu `argparse` automatically
@@ -141,19 +149,19 @@ python3 demo.py
 
 You should get an error message like:
 
-    usage: demo.py [-h] [-n NUMBER] [-t THRESHOLD] [-c] PATH [PATH ...]
-    demo.py: error: the following arguments are required: PATH
+    usage: demo.py [-h] [-n NUMBER] [-t THRESHOLD] [-c] FILE-PATH [FILE-PATH ...]
+    demo.py: error: the following arguments are required: FILE-PATH
 
 If you look in the `demo.py` file, you will not find any code that produces the
 message above.
 `argparse` did that for us.
 
-If we want or script to handle one or more files, we can change our
+If we want our script to handle one or more files, we can change our
 `add_argument` above to:
 
 ```python
 parser.add_argument(
-    "file_paths",
+    "file_path",
     type = str,
     metavar = "FILE-PATH",
     help = "A path to a file.",
@@ -163,9 +171,6 @@ parser.add_argument(
 
 The `nargs = "+"` tells `argparse` that we require at least one file, but there
 might be more.
-Note, I also changed `"file_path"` to `"file_paths"` to help me remember later
-that when we later access the value of this argument it will be a list that
-might have more than one path in it.
 
 ### 3.2. Add keyword arguments
 
@@ -282,10 +287,10 @@ First, use this command to check out the help menu `argparse` automatically
 creates for us:
 
     python3 demo.py -h
-    usage: demo.py [-h] [-n NUMBER] [-t THRESHOLD] [-c] PATH [PATH ...]
+    usage: demo.py [-h] [-n NUMBER] [-t THRESHOLD] [-c] FILE-PATH [FILE-PATH ...]
     
     positional arguments:
-      PATH                  A path to a file.
+      FILE-PATH             A path to a file.
     
     options:
       -h, --help            show this help message and exit
@@ -301,7 +306,7 @@ Some examples:
 
     python3 demo.py -n 3 dummy-path.txt
     The args after being processed by the argparse parser object:
-     Namespace(paths=['dummy-path.txt'], number=3, threshold=3.4, i_am_cool=False)
+     Namespace(file_path=['dummy-path.txt'], number=3, threshold=3.4, i_am_cool=False)
     Paths: ['dummy-path.txt']
     Number: 3
     Threshold: 3.4
@@ -309,7 +314,7 @@ Some examples:
 
     python3 demo.py --threshold 5.5 --i-am-cool dummy-path.txt
     The args after being processed by the argparse parser object:
-     Namespace(paths=['dummy-path.txt'], number=1, threshold=5.5, i_am_cool=True)
+     Namespace(file_path=['dummy-path.txt'], number=1, threshold=5.5, i_am_cool=True)
     Paths: ['dummy-path.txt']
     Number: 1
     Threshold: 5.5
@@ -323,7 +328,7 @@ errors for us.
 For example, try:
 
     python3 demo.py --number 5.5 --i-am-cool dummy-path.txt
-    usage: demo.py [-h] [-n NUMBER] [-t THRESHOLD] [-c] PATH [PATH ...]
+    usage: demo.py [-h] [-n NUMBER] [-t THRESHOLD] [-c] FILE-PATH [FILE-PATH ...]
     demo.py: error: argument -n/--number: invalid int value: '5.5'
 
 Because we told `argpare` that `number` should be an integer, it throws an
@@ -345,7 +350,7 @@ If successful, your modified `demo.py` script should behave like this:
 
     python3 demo.py dummy-path.txt
     The args after being processed by the argparse parser object:
-     Namespace(file_paths=['dummy-path.txt'], number=1, threshold=3.4, i_am_cool=False, quiet=False)
+     Namespace(file_path=['dummy-path.txt'], number=1, threshold=3.4, i_am_cool=False, quiet=False)
     Paths: ['dummy-path.txt']
     Number: 1
     Threshold: 3.4
