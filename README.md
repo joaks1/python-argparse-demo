@@ -246,8 +246,8 @@ be `False`.
 
 ## 4. Parse the command-line arguments provided to our script
 
-After telling the `parser` object all the command-line option we want our
-script to support, then we tell it to parse those options from the
+After telling the `parser` object all the command-line arguments we want our
+script to support, then we tell it to parse those arguments from the
 command-line:
 
 ```python
@@ -255,9 +255,9 @@ args = parser.parse_args()
 ```
 
 This returns a `dict`-like object that we gave the variable name `args`. We can
-now use the `args` object to access the values of the arguments provided on the
-command-line (or the default values if some optional arguments were not
-provided on the command line).
+now use the dict-like `args` object to access the values of the arguments
+provided on the command line (or the default values if some optional arguments
+were not provided on the command line).
 
 ## 5. Access the argument values
 
@@ -275,7 +275,8 @@ print("I am cool?", args.i_am_cool)
 ```
 
 Note, that for the keyword flag that had hyphens, `--i-am-cool`, these have
-been converted to underscores so that they are a valid Python variable name.
+been converted to underscores so that the keyword is a valid Python variable
+name.
 
 # Try out demo.py
 
@@ -287,6 +288,10 @@ First, use this command to check out the help menu `argparse` automatically
 creates for us:
 
     python3 demo.py -h
+
+
+The output should look like:
+
     usage: demo.py [-h] [-n NUMBER] [-t THRESHOLD] [-c] FILE-PATH [FILE-PATH ...]
     
     positional arguments:
@@ -305,6 +310,9 @@ Next, try out some of the options and look at how the outputs change.
 Some examples:
 
     python3 demo.py -n 3 dummy-path.txt
+
+Should produce this output:
+
     The args after being processed by the argparse parser object:
      Namespace(file_path=['dummy-path.txt'], number=3, threshold=3.4, i_am_cool=False)
     Paths: ['dummy-path.txt']
@@ -312,7 +320,12 @@ Some examples:
     Threshold: 3.4
     I am cool? False
 
+And:
+
     python3 demo.py --threshold 5.5 --i-am-cool dummy-path.txt
+
+Should produce this output:
+
     The args after being processed by the argparse parser object:
      Namespace(file_path=['dummy-path.txt'], number=1, threshold=5.5, i_am_cool=True)
     Paths: ['dummy-path.txt']
@@ -328,6 +341,9 @@ errors for us.
 For example, try:
 
     python3 demo.py --number 5.5 --i-am-cool dummy-path.txt
+
+and you should get this output:
+
     usage: demo.py [-h] [-n NUMBER] [-t THRESHOLD] [-c] FILE-PATH [FILE-PATH ...]
     demo.py: error: argument -n/--number: invalid int value: '5.5'
 
