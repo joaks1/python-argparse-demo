@@ -9,7 +9,7 @@ At this point, you should have
 
 1.  Login to your [Github](https://github.com/) account.
 
-1.  Fork [this repository](https://github.com/joaks1/python-file-io), by
+1.  Fork [this repository](https://github.com/joaks1/python-argparse-demo), by
     clicking the 'Fork' button on the upper right of the page.
 
     After a few seconds, you should be looking at *your* 
