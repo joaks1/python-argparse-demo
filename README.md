@@ -189,7 +189,7 @@ parser.add_argument(
 
 Let's break down the parts of this `.add_argument` call:
 
--   The first two arguments ("-n" and "--number") specify how this keyword
+-   The first two arguments (`"-n"` and `"--number"`) specify how this keyword
     argument is identified on the command line.
     For example, someone can provide a number to our script using
 
